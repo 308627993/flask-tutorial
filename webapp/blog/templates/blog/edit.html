@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Post Edit {% endblock %}
+{% from 'macros/render_form.html' import render_form %}
+
+{% block body %}
+<div class="">
+  <h1 class="text-center">Edit the Post</h1>
+  {{ render_form(form,url_for('blog.edit_post',id=post.id),[form.title,form.text],'confirm') }}
+</div>
+<script type="text/javascript" src="{{url_for('static',filename='js/ckeditor.js')}}"></script>
+<script type="text/javascript">
+  ClassicEditor
+    .create( document.querySelector( '#text' ) )
+    .catch( error => {
+        console.error( error );
+    } );
+</script>
+{% endblock %}

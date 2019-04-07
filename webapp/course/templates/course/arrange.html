@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Course Creation {% endblock %}
+{% from 'course/macros/nav.html' import render_nav %}
+
+{% block nav %}
+{{ render_nav(current_user) }}
+{% endblock %}
+
+
+{% block body %}
+<div class="form-group form-inline" >
+  <select id="category" class="form-control" name="category"></select>
+  <select id="teacher" class="form-control" name="teacher"></select>
+  <select id="student" class="form-control" name="student"></select>
+</div>
+
+<script type="text/javascript" src="{{url_for('static',filename='js/course_custom.js')}}"></script>
+
+
+<div class="">
+  <h1 class="text-center">Create the Courses </h1>
+  {{ cal|safe }}
+</div>
+<br>
+
+<br>
+<script type="text/javascript">
+  var sections = new Array();
+  function change_status(element){
+    if (element.className != "btn btn-primary"){
+      element.className = "btn btn-primary" ;
+      sections.push(element.id)}
+    else{
+      element.className = "btn btn-outline-dark";
+      id = sections.indexOf(element.id);
+      sections.splice(id,1);
+      console.log(element.id,id)}
+    console.log(sections)
+  }
+</script>
+
+{% endblock %}

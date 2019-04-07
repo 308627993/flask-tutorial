@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% from 'course/macros/nav.html' import render_nav %}
+
+{% block body %}
+course
+
+
+
+
+{% endblock %}
+
+
+{% block nav %}
+{{ render_nav(current_user) }}
+{% endblock %}

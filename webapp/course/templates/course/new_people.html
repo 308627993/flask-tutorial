@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Category Creation {% endblock %}
+{% from 'macros/render_form.html' import render_form %}
+{% from 'course/macros/nav.html' import render_nav %}
+
+
+{% block body %}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap-datepicker.min.css') }}">
+<script type="text/javascript" src="{{url_for('static',filename='js/bootstrap-datepicker.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/bootstrap-datepicker.zh-CN.min.js')}}"></script>
+
+
+<div class="">
+  <h1 class="text-center">Create A New {{item}}</h1>
+  {{ render_form(form,url_for('course.new',item = item),[form.name,form.gender,form.birthday],'create') }}
+</div>
+
+
+<script type="text/javascript">
+  $("#birthday").datepicker({
+    format: 'yyyy-mm-dd',
+    todayBtn:"linked",
+    autoclose:true,
+    language:"zh-CN"
+    });
+</script>
+{% endblock %}
+
+
+
+{% block nav %}
+{{ render_nav(current_user) }}
+{% endblock %}

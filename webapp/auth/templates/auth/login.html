@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% from 'macros/render_form.html' import render_form %}
+
+{% block body %}
+{{ render_form(form,request.url,[form.username,form.password,form.remember],'LogIn') }}
+
+
+
+
+{% endblock %}

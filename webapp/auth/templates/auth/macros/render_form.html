@@ -1,0 +1,24 @@
+{% macro render_form(form,url,fields,submit_button_name) %}
+<form class="" action="{{url}}" method="POST">
+  {{ form.hidden_tag() }}
+  {% for field in fields %}
+    <div class="form-group">
+      {{ field.label }}
+      {% if field.errors %}
+        {% for e in field.errors %}
+          <p class='help-block'>{{ e }}</p>
+        {% endfor %}
+      {% endif %}
+      {{ field(class = 'form-control' ) }}
+    </div>
+  {% endfor %}
+  <input class="btn btn-primary" type="submit" name="" value="{{submit_button_name}}">
+</form>
+{% endmacro %}
+
+{% macro rend_search_form() %}
+<form class="form-inline my-2 my-lg-0">
+  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+{% endmacro %}
