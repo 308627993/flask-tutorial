@@ -13,7 +13,7 @@
         <a class="nav-link" href="#">Create <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id='arrange_url' href="">arrange</a>
+        <a class="nav-link" id='arrange_url' href="/course/arrange">arrange</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -60,9 +60,5 @@
     </ul>
   </div>
 </nav>
-<script type="text/javascript">
-  var date = new Date;
-  url = "/course/arrange/" + date.getFullYear() + "/" + (date.getMonth() + 1);
-  document.getElementById('arrange_url').href = url ;
-</script>
+
 {% endmacro %}

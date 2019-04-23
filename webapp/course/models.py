@@ -1,16 +1,13 @@
 from webapp.config import db
 from sqlalchemy import Enum
 
-teacher_categorys = db.Table(
-    'teacher_categorys',
+categorys = db.Table(
+    'categorys',
     db.Column('category_id',db.Integer,db.ForeignKey('category.id')),
-    db.Column('teacher_id',db.Integer,db.ForeignKey('teacher.id'))
-    )
-student_categorys = db.Table(
-    'student_categorys',
-    db.Column('category_id',db.Integer,db.ForeignKey('category.id')),
+    db.Column('teacher_id',db.Integer,db.ForeignKey('teacher.id')),
     db.Column('student_id',db.Integer,db.ForeignKey('student.id'))
     )
+
 class Single_course(db.Model):
     '''
     一对一课程
@@ -18,7 +15,6 @@ class Single_course(db.Model):
     id = db.Column(db.Integer(),primary_key = True)
     student_id = db.Column(db.Integer(),db.ForeignKey('student.id'))
     teacher_id = db.Column(db.Integer(),db.ForeignKey('teacher.id'))
-    category_id = db.Column(db.Integer(),db.ForeignKey('category.id'))
     section = db.Column(db.String(255))# db.Column(Enum("1", "2","3","4","5","6","7","8" ,name="section_enum", create_type=False))
     date = db.Column(db.Date())
     def __init__(self,date,section):
@@ -26,13 +22,7 @@ class Single_course(db.Model):
         self.date = date
     def __repr__(self):
         return "<Single_course '{}-{}'>".format(self.date,self.section)
-"""
-class Group_course(db.Model):
-    '''
-    小组课，多个学生，多个老师
-    '''
-    pass
-"""
+
 class Teacher(db.Model):
     '''老师'''
     id = db.Column(db.Integer(),primary_key = True)
@@ -44,9 +34,9 @@ class Teacher(db.Model):
         backref = 'teacher',
         lazy = 'dynamic'
         )
-    teacher_categorys = db.relationship(
+    categorys = db.relationship(
         'Category',
-        secondary = teacher_categorys,
+        secondary = categorys,
         backref = db.backref('teachers',lazy='dynamic')
         )
     def __init__(self,name,gender,birthday):
@@ -67,9 +57,9 @@ class Student(db.Model):
         backref = 'student',
         lazy = 'dynamic'
         )
-    student_categorys = db.relationship(
+    categorys = db.relationship(
         'Category',
-        secondary = student_categorys,
+        secondary = categorys,
         backref = db.backref('students',lazy='dynamic')
         )
     def __init__(self,name,gender,birthday):
@@ -83,11 +73,6 @@ class Category(db.Model):
     '''课程类别'''
     id = db.Column(db.Integer(),primary_key = True)
     name = db.Column(db.String(255),unique = True)
-    single_courses = db.relationship(
-        'Single_course',
-        backref = 'category',
-        lazy = 'dynamic'
-        )
     def __init__(self,name):
         self.name = name
     def __repr__(self):

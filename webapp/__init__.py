@@ -13,6 +13,7 @@ from webapp.course.api import course_api
 
 
 
+
 def create_app(object_name):
     app = Flask(__name__)
     app.config.from_object(DevConfig)

@@ -9,6 +9,7 @@ from flask_login import login_required,current_user
 from webapp.auth.extensions import poster_permission,admin_permission
 from flask_principal import Permission,UserNeed
 from itertools import groupby
+import json
 
 course_blueprint = Blueprint(
     'course',
@@ -22,6 +23,7 @@ def home():
 
 @course_blueprint.route('/new/<string:item>',methods=('GET','POST'))
 def new(item):
+    category_choices =json.dumps([{'id':i.id,'name':i.name} for i in Category.query.all()])
     if item == 'category':
         form = CategoryForm()
         if form.validate_on_submit():
@@ -37,7 +39,7 @@ def new(item):
             db.session.add(new_teacher)
             db.session.commit()
             return redirect(url_for('.home'))
-        return render_template('course/new_people.html',form = form,item='teacher')
+        return render_template('course/new_people.html',form = form,item='teacher',category_choices=category_choices)
     elif item == 'student':
         form = PeopleForm()
         if form.validate_on_submit():
@@ -45,7 +47,7 @@ def new(item):
             db.session.add(new_student)
             db.session.commit()
             return redirect(url_for('.home'))
-        return render_template('course/new_people.html',form = form,item='student')
+        return render_template('course/new_people.html',form = form,item='student',category_choices=category_choices)
     elif item == 'course':
         form = CourseForm()
         if form.validate_on_submit():
@@ -53,7 +55,7 @@ def new(item):
             db.session.add(new_course)
             db.session.commit()
             return redirect(url_for('.home'))
-        return render_template('course/new_course.html',form = form)
+        return render_template('course/new_course.html',form = form,)
 
 class WorkoutCalendar(calendar.HTMLCalendar):
     def __init__(self, workouts):
@@ -108,12 +110,27 @@ class WorkoutCalendar(calendar.HTMLCalendar):
             return '<td class="td-head">%s月%s日</td>'%(self.month,day)
         return  '<td></td>'
 
-@course_blueprint.route('/arrange/<string:year>/<string:month>',methods=('GET','POST'))
-def arrange(year=datetime.date.today().year,month=datetime.date.today().month):
+@course_blueprint.route('/modify/<string:year>/<string:month>',methods=('GET','POST'))
+def modify(year=datetime.date.today().year,month=datetime.date.today().month):
+    '''
     my_workouts = Single_course.query.filter(
                                     extract('year',Single_course.date) == year,
                                     extract('month',Single_course.date) == month).all()
+    '''
+    my_workouts = []
     cal = WorkoutCalendar(my_workouts).formatmonth(year, month)
     #months=['01','02','03','04','05','06','07','08','09','10','11','12']
     #context ={'calendar': mark_safe(cal),'step':step,'months':months}
-    return render_template('course/arrange.html',cal=cal)
+    return render_template('course/modify.html',cal=cal)
+
+@course_blueprint.route('/arrange',methods=('GET','POST'))
+def arrange():
+    category_form = CategoryForm()
+    teacher_form = PeopleForm()
+    student_form = PeopleForm()
+    weekdays = ((1,'每周一'),(2,'每周二'),(3,'每周三'),(4,'每周四'),(5,'每周五'),(6,'每周六'),(7,'每周日'))
+    return render_template('course/arrange.html',
+                            weekdays = weekdays,
+                            category_form=category_form,
+                            teacher_form = teacher_form,
+                            student_form = student_form,)

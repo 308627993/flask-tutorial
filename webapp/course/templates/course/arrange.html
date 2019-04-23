@@ -1,42 +1,166 @@
 {% extends "base.html" %}
 {% block title %}Course Creation {% endblock %}
 {% from 'course/macros/nav.html' import render_nav %}
-
+{% from 'course/macros/render_form.html' import render_form %}
 {% block nav %}
 {{ render_nav(current_user) }}
 {% endblock %}
 
 
 {% block body %}
-<div class="form-group form-inline" >
-  <select id="category" class="form-control" name="category"></select>
-  <select id="teacher" class="form-control" name="teacher"></select>
-  <select id="student" class="form-control" name="student"></select>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="course-tab" data-toggle="tab" href="#course-content" role="tab" aria-controls="course-content" aria-selected="true">创建课程</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="teacher-tab" data-toggle="tab" href="#teacher-content" role="tab" aria-controls="teacher-content" aria-selected="false">创建教师</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="student-tab" data-toggle="tab" href="#student-content" role="tab" aria-controls="staudent-content" aria-selected="false">创建学生</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="category-tab" data-toggle="tab" href="#category-content" role="tab" aria-controls="category-content" aria-selected="false">创建分类</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="course-content" role="tabpanel" aria-labelledby="course-tab">
+    <div class="row" style="margin-top:10px">
+      <div class="col-3">
+        <div class="" id='create_course_block'>
+          <div class="form-group form-inline" >
+            <label for="category" style="width:20%">科目：</label>
+            <select id="category" class="form-control" name="category" style="width:80%"></select>
+          </div>
+          <div class="form-group form-inline" >
+            <label for="teacher" style="width:20%">教师：</label>
+            <select id="teacher" class="form-control" name="teacher" style="width:80%"></select>
+          </div>
+          <div class="form-group form-inline" >
+            <label for="student" style="width:20%">学员：</label>
+            <select id="student" class="form-control" name="student" style="width:80%"></select>
+          </div>
+          <div class="form-group form-inline" >
+            <label for="weekday" style="width:20%">周别：</label>
+            <select id="weekday" class="form-control" name="weekday" style="width:80%">
+              <option value="">选择每周几</option>
+              {% for k,v in weekdays %}
+              <option value="{{k}}">{{v}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group form-inline" >
+            <label for="section" style="width:20%">课时：</label>
+            <select id="section" class="form-control" name="section" style="width:80%">
+              <option value="">选择第几节</option>
+              {% for i in range(1,13) %}
+              <option value="{{i}}">第{{i}}节</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group form-inline" >
+            <label for="startday" style="width:20%">开始：</label>
+            <input id="startday" class="form-control" name="startday" type="text" placeholder='选择开始日期' style="width:80%">
+          </div>
+          <div class="form-group form-inline" >
+            <label for="endday" style="width:20%">截止：</label>
+            <input id="endday" class="form-control" name="endday" type="text" placeholder='选择截止日期' style="width:80%">
+            <div id = "postform"></div>
+          </div>
+          <div class="form-group form-inline">
+            <input class="btn btn-success" type="submit" name="" value="创建课程" style="margin:auto" onclick="create_course()">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-9">
+        <div id="exist_result"></div>
+        <div id="create_result"></div>
+        <div id="error_result"></div>
+      </div>
+
+      <!-- Button trigger modal -->
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="create_course()">重新创建</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="teacher-content" role="tabpanel" aria-labelledby="teacher-tab">
+    <div class="row" style="margin-top:10px">
+      <div class="col-3">
+        {{ render_form(teacher_form,url_for('category_create_api'),[teacher_form.name,teacher_form.gender,teacher_form.birthday,teacher_form.categorys],'创建',id="teacher_form_id") }}
+      </div>
+      <div class="col-9">
+
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="student-content" role="tabpanel" aria-labelledby="student-tab">
+    <div class="row" style="margin-top:10px">
+      <div class="col-3">
+        {{ render_form(student_form,url_for('category_create_api'),[student_form.name,student_form.gender,student_form.birthday,student_form.categorys],'创建',id="student_form_id") }}
+      </div>
+      <div class="col-9">
+
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="category-content" role="tabpanel" aria-labelledby="category-tab">
+    <div class="row" style="margin-top:10px">
+      <div class="col-3">
+        {{ render_form(category_form,url_for('category_create_api'),[category_form.name,],'创建',id="category_form_id") }}
+      </div>
+      <div class="col-9">
+
+      </div>
+    </div>
+  </div>
 </div>
 
-<script type="text/javascript" src="{{url_for('static',filename='js/course_custom.js')}}"></script>
 
 
-<div class="">
-  <h1 class="text-center">Create the Courses </h1>
-  {{ cal|safe }}
-</div>
+
+
+
+
+<script type="text/javascript" src="{{url_for('static',filename='js/course_arrange.js')}}"></script>
+<script type="text/javascript">
+  format = {
+    format: 'yyyy-mm-dd',
+    todayBtn:"linked",
+    autoclose:true,
+    language:"zh-CN"
+  };
+	$("#startday").datepicker(format);
+  $("#endday").datepicker(format);
+
+</script>
+
+
+
 <br>
 
 <br>
 <script type="text/javascript">
-  var sections = new Array();
-  function change_status(element){
-    if (element.className != "btn btn-primary"){
-      element.className = "btn btn-primary" ;
-      sections.push(element.id)}
-    else{
-      element.className = "btn btn-outline-dark";
-      id = sections.indexOf(element.id);
-      sections.splice(id,1);
-      console.log(element.id,id)}
-    console.log(sections)
-  }
+
 </script>
 
 {% endblock %}

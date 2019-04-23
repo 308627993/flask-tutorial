@@ -12,7 +12,7 @@
 
 <div class="">
   <h1 class="text-center">Create A New {{item}}</h1>
-  {{ render_form(form,url_for('course.new',item = item),[form.name,form.gender,form.birthday],'create') }}
+  {{ render_form(form,url_for('course.new',item = item),[form.name,form.gender,form.birthday,form.categorys],'create') }}
 </div>
 
 
@@ -23,6 +23,11 @@
     autoclose:true,
     language:"zh-CN"
     });
+  $("#birthday").attr('autocomplete','off')
+  var choices = {{category_choices|safe}}
+  for(i in choices){
+    $("#categorys").append("<option value="+ choices[i].id +">" + choices[i].name +"</option>")
+  }
 </script>
 {% endblock %}
 

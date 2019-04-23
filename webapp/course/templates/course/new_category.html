@@ -1,14 +1,19 @@
 {% extends "base.html" %}
 {% block title %}Category Creation {% endblock %}
-{% from 'macros/render_form.html' import render_form %}
+{% from 'course/macros/render_form.html' import render_form %}
 {% from 'course/macros/nav.html' import render_nav %}
 
 {% block body %}
-<div class="">
-  <h1 class="text-center">Create A New Category</h1>
-  {{ render_form(form,url_for('course.new',item='category'),[form.name,],'add new category') }}
-</div>
+<div class="row">
+  <div class="col-3">
+{{ render_form(form,url_for('category_create_api'),[form.name,],'创建',id="category_form_id") }}
+  </div>
 
+  <div class="col-9">
+    <div id="exist_result"></div>
+    <div id="create_result"></div>
+    <div id="error_result"></div>
+  </div>
 {% endblock %}
 
 {% block nav %}

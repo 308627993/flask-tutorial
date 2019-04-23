@@ -10,7 +10,7 @@ class ProdConfig(Config):
 
 class DevConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:///{}".format(path.join(path.pardir,"database.db").replace('\\','/'))
+    SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
     #SQLALCHEMY_ECHO = True # sqlalchemy 翻译sql查询语句
 
 

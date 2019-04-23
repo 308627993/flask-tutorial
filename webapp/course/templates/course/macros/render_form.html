@@ -1,5 +1,5 @@
-{% macro render_form(form,url,fields,submit_button_name) %}
-<form class="" action="{{url}}" method="POST">
+{% macro render_form(form,url,fields,submit_button_name,id="form_id") %}
+<form class="" id="{{id}}" action="{{url}}" method="POST">
   {{ form.hidden_tag() }}
   {% for field in fields %}
     <div class="form-group">
@@ -9,7 +9,7 @@
           <p class='help-block'>{{ e }}</p>
         {% endfor %}
       {% endif %}
-      {{ field(class = 'form-control' ) }}
+      {{ field(class = 'form-control',id=id+'_'+field.name) }}
     </div>
   {% endfor %}
   <input class="btn btn-primary" type="submit" name="" value="{{submit_button_name}}">

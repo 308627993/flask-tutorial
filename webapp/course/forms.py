@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,TextAreaField,RadioField,DateField,SelectField
+from wtforms import StringField,TextAreaField,RadioField,DateField,SelectField,SelectMultipleField
 #from wtforms.fields import core
 from wtforms.validators import DataRequired,Length
 from .models import Category
@@ -8,6 +8,9 @@ class PeopleForm(FlaskForm):
     name = StringField('Name',validators = [DataRequired(),Length(max=255)])
     gender = SelectField(label='Gender', choices= [('male','male'),('female','female')])
     birthday = DateField('Birthday', format='%Y-%m-%d')
+    categorys = SelectMultipleField('Categorys',choices=[])
+
+
 
 class CourseForm(FlaskForm):
     section = SelectField('section',choices=[("1","1"),("2","2"),("3","3")])
