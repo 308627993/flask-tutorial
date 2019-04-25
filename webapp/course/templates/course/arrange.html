@@ -106,7 +106,7 @@
   <div class="tab-pane fade" id="teacher-content" role="tabpanel" aria-labelledby="teacher-tab">
     <div class="row" style="margin-top:10px">
       <div class="col-3">
-        {{ render_form(teacher_form,url_for('category_create_api'),[teacher_form.name,teacher_form.gender,teacher_form.birthday,teacher_form.categorys],'创建',id="teacher_form_id") }}
+        {{ render_form(teacher_form,url_for('item_create_api',item='teacher'),[teacher_form.name,teacher_form.gender,teacher_form.birthday,teacher_form.categorys],'创建',id="teacher_form_id") }}
       </div>
       <div class="col-9">
 
@@ -116,7 +116,7 @@
   <div class="tab-pane fade" id="student-content" role="tabpanel" aria-labelledby="student-tab">
     <div class="row" style="margin-top:10px">
       <div class="col-3">
-        {{ render_form(student_form,url_for('category_create_api'),[student_form.name,student_form.gender,student_form.birthday,student_form.categorys],'创建',id="student_form_id") }}
+        {{ render_form(student_form,url_for('item_create_api',item='student'),[student_form.name,student_form.gender,student_form.birthday,student_form.categorys],'创建',id="student_form_id") }}
       </div>
       <div class="col-9">
 
@@ -126,7 +126,7 @@
   <div class="tab-pane fade" id="category-content" role="tabpanel" aria-labelledby="category-tab">
     <div class="row" style="margin-top:10px">
       <div class="col-3">
-        {{ render_form(category_form,url_for('category_create_api'),[category_form.name,],'创建',id="category_form_id") }}
+        {{ render_form(category_form,url_for('item_create_api',item='category'),[category_form.name,],'创建',id="category_form_id") }}
       </div>
       <div class="col-9">
 

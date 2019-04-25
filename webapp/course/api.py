@@ -175,26 +175,41 @@ class Course_delete_api(Resource):
         return json.dumps(data)
 course_api.add_resource(Course_delete_api,'/api/course_delete')
 
-class Category_create_api(Resource):
-    def post(self):
+class Item_create_api(Resource):
+    def post(self,item):
         from urllib.parse import unquote
         data = (request.get_data()).decode(encoding='UTF-8',errors='strict')
-        data_dic = {i.split('=')[0]:i.split('=')[1] for i in data.split('&')}
+        data_dic = {}
+        for i in data.split('&'):
+            a,b = i.split('=')
+            data_dic[a] = unquote(b)  if a not in data_dic else data_dic[a]+ ('-*-' + unquote(b))
         print('data:**************',data)
-        name = unquote(data_dic['name']) if 'name' in data_dic else None
-        print('data and name :',data,'********************',name)
-        if Category.query.filter_by(name=name).first():#查询该类名已经存在
-            return json.dumps({'info':'already exist','result':'fail'})
-        else:#该类名不存在，创建新的类
-            try:
-                new_category = Category(name)
-                db.session.add(new_category)
+        if item == 'category':
+            name = data_dic['name'] if 'name' in data_dic else None
+            if Category.query.filter_by(name=name).first():#查询该类名已经存在
+                return json.dumps({'info':'already exist','result':'fail'})
+            else:#该类名不存在，创建新的类
+                try:
+                    new_category = Category(name)
+                    db.session.add(new_category)
+                    db.session.commit()
+                    info = '<%s> 创建成功！'%name
+                    result = (new_category.id,name)
+                except Exception as e:
+                    info = '<%s> 创建失败，原因： [%s]'%(name,e)
+                    result = 'fail'
+                return json.dumps({'info':info,'result':result})
+        elif item == 'student' or item == 'teacher':
+            name = data_dic['name'] if 'name' in data_dic else None
+            birthday = data_dic['birthday'] if 'birthday' in data_dic else None
+            gender = data_dic['gender'] if 'gender' in data_dic else None
+            categorys = (data_dic['categorys']).split('-*-') if 'categorys' in data_dic else None
+            if (name and birthday and gender and categorys):
+                if item == 'student':
+                    new_people = Student(name,gender,datetime.strptime(birthday, "%Y-%m-%d"))
+                elif item == 'teacher':
+                    new_people = Teacher(name,gender,datetime.strptime(birthday, "%Y-%m-%d"))
+                [new_people.categorys.append(Category.query.get(category)) for category in categorys]
+                db.session.add(new_people)
                 db.session.commit()
-                info = '<%s> 创建成功！'%name
-                result = (new_category.id,name)
-            except Exception as e:
-                info = '<%s> 创建失败，原因： [%s]'%(name,e)
-                result = 'fail'
-            return json.dumps({'info':info,'result':result})
-
-course_api.add_resource(Category_create_api,'/api/category_create',endpoint='category_create_api')
+course_api.add_resource(Item_create_api,'/api/item_create/<string:item>',endpoint='item_create_api')

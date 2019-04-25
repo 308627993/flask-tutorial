@@ -136,6 +136,8 @@ function create_category_success(data){
 			if(result != 'fail'){
 				//表示category创建成功，把新创建的category添加到select选项中
 				category.append("<option  value=" + result[0] + ">" + result[1] + "</option>");
+				$('#teacher_form_id_categorys').append("<option  value=" + result[0] + ">" + result[1] + "</option>");
+				$('#student_form_id_categorys').append("<option  value=" + result[0] + ">" + result[1] + "</option>");
 				$('#name').val("");
 				alert(info);
 			}
@@ -154,7 +156,11 @@ $(function() {
 		url : "/api/category",
 		cache:false,
 		success:function(data){
-			$.each(data,function(){category.append("<option  value=" + this.id + ">" + this.name + "</option>");})
+			$.each(data,function(){
+				category.append("<option  value=" + this.id + ">" + this.name + "</option>");
+				$('#teacher_form_id_categorys').append("<option  value=" + this.id + ">" + this.name + "</option>");
+				$('#student_form_id_categorys').append("<option  value=" + this.id + ">" + this.name + "</option>");
+			})
 		}
 	})
 
